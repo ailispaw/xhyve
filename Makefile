@@ -103,7 +103,10 @@ TARGET = build/xhyve
 
 all: $(TARGET) | build
 
-.PHONY: clean all
+install: $(TARGET)
+	@install -CSv $(TARGET) /usr/local/bin/
+
+.PHONY: clean all install
 .SUFFIXES:
 
 -include $(DEP)
