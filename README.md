@@ -79,6 +79,7 @@ It exposes the following peripherals to virtual machines:
     - VirtIO block device
     - VirtIO networking
     - VirtIO RNG
+    - VirtIO filesystem sharing
     - Intel e1000 (aka e82545)
     - VGA/Framebuffer (exposed with a minimal VNC server)
     - XHCI USB support with one device defined - a tablet for Windows guest support

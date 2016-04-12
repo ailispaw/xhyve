@@ -53,6 +53,7 @@ XHYVE_SRC := \
 	src/pci_irq.c \
 	src/pci_lpc.c \
 	src/pci_uart.c \
+	src/pci_virtio_9p.c \
 	src/pci_virtio_block.c \
 	src/pci_virtio_net_tap.c \
 	src/pci_virtio_net_vmnet.c \
@@ -76,14 +77,24 @@ FIRMWARE_SRC := \
 	src/firmware/kexec.c \
 	src/firmware/fbsd.c
 
+LIB9P_SRC := \
+	lib9p/connection.c \
+	lib9p/hashtable.c \
+	lib9p/log.c \
+	lib9p/pack.c \
+	lib9p/request.c \
+	lib9p/utils.c \
+	lib9p/sbuf/sbuf.c \
+	lib9p/backend/fs.c
+
 SRC := \
 	$(VMM_SRC) \
 	$(XHYVE_SRC) \
 	$(FIRMWARE_SRC)
 
-OBJ := $(SRC:src/%.c=build/%.o)
+OBJ := $(SRC:src/%.c=build/%.o) $(LIB9P_SRC:lib9p/%.c=build/lib9p/%.o)
 DEP := $(OBJ:%.o=%.d)
-INC := -Iinclude
+INC := -Iinclude -Ilib9p
 
 CFLAGS += -DVERSION=\"$(GIT_VERSION)\"
 
@@ -104,6 +115,11 @@ build/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(VERBOSE) $(ENV) $(CC) $(CFLAGS) $(INC) $(DEF) -MMD -MT $@ -MF build/$*.d -o $@ -c $<
 
+build/lib9p/%.o: lib9p/%.c
+	@echo cc $<
+	@mkdir -p $(dir $@)
+	$(VERBOSE) $(ENV) $(CC) $(CFLAGS) $(CFLAGS_LIB9P) $(INC) $(DEF) -MMD -MT $@ -MF build/lib9p/$*.d -o $@ -c $<
+
 $(TARGET).sym: $(OBJ)
 	@echo ld $(notdir $@)
 	$(VERBOSE) $(ENV) $(LD) $(LDFLAGS) -Xlinker $(TARGET).lto.o -o $@ $(OBJ)
@@ -116,3 +132,4 @@ $(TARGET): $(TARGET).sym
 
 clean:
 	@rm -rf build
+
