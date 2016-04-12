@@ -78,13 +78,14 @@ FIRMWARE_SRC := \
 	src/firmware/fbsd.c
 
 LIB9P_SRC := \
-	lib9p/connection.c \
-	lib9p/hashtable.c \
-	lib9p/log.c \
 	lib9p/pack.c \
+	lib9p/connection.c \
 	lib9p/request.c \
+	lib9p/log.c \
+	lib9p/hashtable.c \
 	lib9p/utils.c \
-	lib9p/sbuf/sbuf.c \
+	lib9p/rfuncs.c \
+	lib9p/transport/socket.c  \
 	lib9p/backend/fs.c
 
 SRC := \
@@ -132,4 +133,3 @@ $(TARGET): $(TARGET).sym
 
 clean:
 	@rm -rf build
-
