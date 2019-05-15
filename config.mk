@@ -50,7 +50,8 @@ CFLAGS_DBG := \
 CFLAGS_LIB9P := \
   -Wno-padded \
   -Wno-gnu-zero-variadic-macro-arguments \
-  -Wno-format-nonliteral
+  -Wno-format-nonliteral \
+  -Wno-unused-macros
 
 CFLAGS := \
   -arch x86_64 \
